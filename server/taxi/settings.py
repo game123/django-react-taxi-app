@@ -1,5 +1,6 @@
 
 import os # add with the other imports
+import datetime
 
 from pathlib import Path
 
@@ -11,8 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'r_p_g07f5=)pvi+!j2c*9&8@@pb8wlmu26nqbjnfj!5sfc0bgv'
-
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET", "r_p_g07f5=)pvi+!j2c*9&8@@pb8wlmu26nqbjnfj!5sfc0bgv")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -28,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'rest_framework', # new
     'trips', # new
 ]
@@ -128,4 +130,19 @@ CHANNEL_LAYERS = {
             'hosts': [REDIS_URL],
         },
     },
+}
+
+ASGI_APPLICATION = 'taxi.routing.application'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'USER_ID_CLAIM': 'id',
 }
