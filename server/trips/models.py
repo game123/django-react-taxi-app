@@ -34,7 +34,7 @@ class Trip(models.Model):
         null=True,
         blank=True,
         on_delete=models.DO_NOTHING,
-        related_name='trip_as_driver'
+        related_name='trips_as_driver'
     )
     rider = models.ForeignKey(
         settings.AUTH_USER_MODEL,
