@@ -1,4 +1,5 @@
 
+from .middleware import TokenAuthMiddlewareStack
 from django.core.asgi import get_asgi_application
 from django.urls import path
 
@@ -9,7 +10,9 @@ from trips.consumers import TaxiConsumer
 application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     # new
-    'websocket': URLRouter([
-        path('taxi/', TaxiConsumer.as_asgi()),
-    ]),
+    'websocket': TokenAuthMiddlewareStack(
+        URLRouter([
+            path('taxi/', TaxiConsumer.as_asgi()),
+        ])
+    ),
 })
