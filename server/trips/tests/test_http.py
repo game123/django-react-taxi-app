@@ -38,6 +38,7 @@ class AuthenticationTest(APITestCase):
             'last_name': 'User',
             'password1': PASSWORD,
             'password2': PASSWORD,
+            'group': 'rider', #new
         })
         user = get_user_model().objects.last()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
@@ -45,6 +46,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(response.data['username'], user.username)
         self.assertEqual(response.data['first_name'], user.first_name)
         self.assertEqual(response.data['last_name'], user.last_name)
+        self.assertEqual(response.data['group'], user.group) # new
 
     def test_user_can_log_in(self): 
         user = create_user()
